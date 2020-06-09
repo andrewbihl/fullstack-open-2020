@@ -1,0 +1,11 @@
+- [ ] 1.1: course information, step 1
+- [ ] 1.2: course information, step 2
+- [ ] 1.3: course information, step 3
+- [ ] 1.4: course information, step 4
+- [ ] 1.5: course information, step 5
+- [ ] 1.6: unicafe, step 1
+- [ ] 1.7: unicafe, step 2
+- [ ] 1.8: unicafe, step 3
+- [ ] 1.9: unicafe, step 4
+- [ ] 1.10: unicafe, step 5
+- [ ] 1.11: unicafe, step 6
