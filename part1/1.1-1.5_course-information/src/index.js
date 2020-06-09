@@ -30,12 +30,18 @@ const Content = (props) => {
     <div>
     {
       props.parts.map(pt => (
-        <p>
-          {pt[0]} {pt[1]}
-        </p>
+        <Part name={pt[0]} exerciseCount={pt[1]} />
       ))
     }
     </div>
+  )
+}
+
+const Part = (props) => {
+  return (
+    <p>
+      {props.name} {props.exerciseCount}
+    </p>
   )
 }
 
