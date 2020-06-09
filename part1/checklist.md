@@ -2,7 +2,7 @@
 - [x] 1.2: course information, step 2
 - [x] 1.3: course information, step 3
 - [x] 1.4: course information, step 4
-- [ ] 1.5: course information, step 5
+- [x] 1.5: course information, step 5
 - [ ] 1.6: unicafe, step 1
 - [ ] 1.7: unicafe, step 2
 - [ ] 1.8: unicafe, step 3
