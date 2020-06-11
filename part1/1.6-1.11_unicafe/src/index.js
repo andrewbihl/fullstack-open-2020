@@ -1,24 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const Statistics = (props) => {
-  const { good, bad, neutral } = { ...props };
 
-  const total = good + bad + neutral;
-  if (total === 0) {
-    return <p>No feedback given</p>;
-  }
-
-  return (
-    <>
-      <p>good {good}</p>
-      <p>netural {neutral}</p>
-      <p>bad {bad}</p>
-      <p>average {(good - bad) / (good + bad + neutral)}</p>
-      <p>positive {good / (good + bad + neutral)}</p>
-    </>
-  );
-};
 
 const App = () => {
   const [good, setGood] = useState(0);
@@ -49,6 +32,30 @@ const App = () => {
     </>
   );
 };
+
+const Statistics = (props) => {
+  const { good, bad, neutral } = { ...props };
+
+  const total = good + bad + neutral;
+  if (total === 0) {
+    return <p>No feedback given</p>;
+  }
+
+  return (
+    <>
+      <Statistic text="good" value={good}></Statistic>
+      <Statistic text="bad" value={bad}></Statistic>
+      <Statistic text="neutral" value={neutral}></Statistic>
+      <Statistic text="average" value={(good - bad) / (good + bad + neutral)}></Statistic>
+      <Statistic text="positive" value={good / (good + bad + neutral)}></Statistic>
+    </>
+  );
+};
+
+const Statistic = (props) => {
+  const { text, value } = {...props}
+  return <p>{text} {value}</p>
+}
 
 const Button = (props) => {
   const { label, handleClick } = { ...props };
