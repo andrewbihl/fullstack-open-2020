@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-
-
 const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
@@ -42,20 +40,40 @@ const Statistics = (props) => {
   }
 
   return (
-    <>
-      <Statistic text="good" value={good}></Statistic>
-      <Statistic text="bad" value={bad}></Statistic>
-      <Statistic text="neutral" value={neutral}></Statistic>
-      <Statistic text="average" value={(good - bad) / (good + bad + neutral)}></Statistic>
-      <Statistic text="positive" value={good / (good + bad + neutral)}></Statistic>
-    </>
+    <table>
+      <tbody>
+        <Statistic text="good" value={good}></Statistic>
+        <Statistic text="bad" value={bad}></Statistic>
+        <Statistic text="neutral" value={neutral}></Statistic>
+        <Statistic
+          text="average"
+          value={(good - bad) / (good + bad + neutral)}
+        ></Statistic>
+        <Statistic
+          text="positive"
+          value={good / (good + bad + neutral)}
+        ></Statistic>
+      </tbody>
+    </table>
+    // // <>
+    // //   <Statistic text="good" value={good}></Statistic>
+    //   <Statistic text="bad" value={bad}></Statistic>
+    //   <Statistic text="neutral" value={neutral}></Statistic>
+    //   <Statistic text="average" value={(good - bad) / (good + bad + neutral)}></Statistic>
+    //   <Statistic text="positive" value={good / (good + bad + neutral)}></Statistic>
+    // // </>
   );
 };
 
 const Statistic = (props) => {
-  const { text, value } = {...props}
-  return <p>{text} {value}</p>
-}
+  const { text, value } = { ...props };
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  );
+};
 
 const Button = (props) => {
   const { label, handleClick } = { ...props };
