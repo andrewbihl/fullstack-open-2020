@@ -17,17 +17,41 @@ const App = (props) => {
     setVotes(newVotes);
   };
 
+  const maxVoteIndex = () => {
+    let max = -1;
+    let res = 0;
+    for (let i = 0; i < votes.length; i++) {
+      if (votes[i] > max) {
+        max = votes[i];
+        res = i;
+      }
+    }
+    return res;
+  };
+
+  const mvi = maxVoteIndex();
+
   return (
     <div>
-      <p>{props.anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
+      <Anecdote text={anecdotes[selected]} votes={votes[selected]}></Anecdote>
       <button onClick={() => handleClickNext(anecdotes.length)}>
         New Quote
       </button>
       <button onClick={handleClickVote}>Vote</button>
+      <Anecdote text={anecdotes[mvi]} votes={votes[mvi]}></Anecdote>
     </div>
   );
 };
+
+const Anecdote = (props) => {
+  const {text, votes} = {...props}
+  return (
+    <>
+      <p>{text}</p>
+      <p>has {votes} votes</p>
+    </>
+  )
+}
 
 const anecdotes = [
   "If it hurts, do it more often",
