@@ -1,0 +1,5 @@
+- [ ] 2.1: course information, step 6
+- [ ] 2.2: course information, step 7
+- [ ] 2.3: course information, step 8
+- [ ] 2.4: course information, step 9
+- [ ] 2.5: course information, step 10
