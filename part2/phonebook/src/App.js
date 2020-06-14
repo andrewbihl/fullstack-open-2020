@@ -33,7 +33,7 @@ const App = (props) => {
       <h2>Phonebook</h2>
       <form onSubmit={handleContactSubmit}>
         <div>
-          name:{" "}
+          {"name: "}
           <input
             placeholder={"Enter name"}
             value={newName}  
