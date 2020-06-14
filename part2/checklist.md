@@ -5,6 +5,6 @@
 - [x] 2.5: course information, step 10
 - [x] 2.6: phonebook, step 1
 - [x] 2.7: phonebook, step 2
-- [ ] 2.8: phonebook, step 3
+- [x] 2.8: phonebook, step 3
 - [ ] 2.9: phonebook, step 4
 - [ ] 2.10: phonebook, step 5
