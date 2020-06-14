@@ -7,4 +7,4 @@
 - [x] 2.7: phonebook, step 2
 - [x] 2.8: phonebook, step 3
 - [x] 2.9: phonebook, step 4
-- [ ] 2.10: phonebook, step 5
+- [x] 2.10: phonebook, step 5

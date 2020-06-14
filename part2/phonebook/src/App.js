@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import Contact from "./components/Contact";
+import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
+import ContactSearchBar from "./components/ContactSearchBar";
 
 const App = (props) => {
   const [persons, setPersons] = useState([{ name: "Andrew Bihl" }]);
@@ -25,8 +26,10 @@ const App = (props) => {
     }
   };
 
-  function getFilteredContacts(persons, query) {
-    return persons.filter((p) => p.name.toLowerCase().includes(query.toLowerCase()));
+  function filteredContacts(persons, query) {
+    return persons.filter((p) =>
+      p.name.toLowerCase().includes(query.toLowerCase())
+    );
   }
 
   function handleSearchBarChange(event) {
@@ -57,38 +60,8 @@ const App = (props) => {
         query={query}
         onChange={handleSearchBarChange}
       ></ContactSearchBar>
-      <ContactList
-        contacts={getFilteredContacts(persons, query)}
-      ></ContactList>
+      <ContactList contacts={filteredContacts(persons, query)}></ContactList>
     </div>
-  );
-};
-
-const ContactSearchBar = (props) => {
-  const { query, onChange } = { ...props };
-
-  return (
-    <input
-      placeholder="Search contacts"
-      value={query}
-      onChange={onChange}
-    ></input>
-  );
-};
-
-const ContactList = (props) => {
-  let { contacts, filterFunc } = { ...props };
-
-  if (!filterFunc) {
-    filterFunc = (v) => true;
-  }
-
-  return (
-    <ul>
-      {contacts.filter(filterFunc).map((c) => (
-        <Contact contact={c} key={c.name + c.phone} />
-      ))}
-    </ul>
   );
 };
 
