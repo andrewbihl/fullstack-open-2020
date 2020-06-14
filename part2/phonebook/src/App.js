@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Contact from "./components/Contact";
+import ContactForm from "./components/ContactForm";
 
 const App = (props) => {
   const [persons, setPersons] = useState([{ name: "Andrew Bihl" }]);
 
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
+  const [query, setQuery] = useState("");
 
   const submitNewContact = () => {
     setPersons(persons.concat({ name: newName, phone: newPhone }));
@@ -22,6 +24,15 @@ const App = (props) => {
       submitNewContact();
     }
   };
+
+  function getFilteredContacts(persons, query) {
+    return persons.filter((p) => p.name.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  function handleSearchBarChange(event) {
+    const query = event.target.value;
+    setQuery(event.target.value);
+  }
 
   return (
     <div>
@@ -42,54 +53,42 @@ const App = (props) => {
         handleSubmit={handleContactSubmit}
       ></ContactForm>
       <h2>Contacts</h2>
-      <ul>
-        {persons.map((c) => (
-          <Contact contact={c} key={c.name + c.phone} />
-        ))}
-      </ul>
+      <ContactSearchBar
+        query={query}
+        onChange={handleSearchBarChange}
+      ></ContactSearchBar>
+      <ContactList
+        contacts={getFilteredContacts(persons, query)}
+      ></ContactList>
     </div>
   );
 };
 
-const ContactForm = (props) => {
-  const { fields, handleSubmit } = { ...props };
+const ContactSearchBar = (props) => {
+  const { query, onChange } = { ...props };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <table>
-          <tbody>
-            {fields.map((f) => (
-              <ContactFormRow field={f} key={f.name}></ContactFormRow>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
+    <input
+      placeholder="Search contacts"
+      value={query}
+      onChange={onChange}
+    ></input>
   );
 };
 
-const ContactFormRow = (props) => {
-  const { field } = { ...props };
+const ContactList = (props) => {
+  let { contacts, filterFunc } = { ...props };
 
-  const handleChange = (event, setter) => {
-    setter(event.target.value);
-  };
+  if (!filterFunc) {
+    filterFunc = (v) => true;
+  }
 
   return (
-    <tr>
-      <td>{`${field.name}: `}</td>
-      <td>
-        <input
-          placeholder={`Enter ${field.name}`}
-          value={field.value}
-          onChange={(e) => handleChange(e, field.setter)}
-        />
-      </td>
-    </tr>
+    <ul>
+      {contacts.filter(filterFunc).map((c) => (
+        <Contact contact={c} key={c.name + c.phone} />
+      ))}
+    </ul>
   );
 };
 
