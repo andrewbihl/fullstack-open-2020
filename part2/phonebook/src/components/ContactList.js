@@ -5,10 +5,9 @@ const ContactList = (props) => {
 
   return (
     <ul>
-      {contacts.map((contact) => {
-        const txt = `${contact.name} - ${contact.phone}`;
-        return <li>{txt}</li>;
-      })}
+      {contacts.map((contact) => (
+        <li key={contact.id}>{`${contact.name} - ${contact.number}`}</li>
+      ))}
     </ul>
   );
 };

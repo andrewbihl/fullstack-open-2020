@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
 import ContactSearchBar from "./components/ContactSearchBar";
+import axios from "axios"
 
 const App = (props) => {
-  const [persons, setPersons] = useState([{ name: "Andrew Bihl" }]);
-
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [query, setQuery] = useState("");
 
+
+useEffect(() => {
+    axios.get("http://localhost:3001/persons")
+          .then(response => {
+              console.log("promised fulfilled:", response)
+              setPersons(response.data)
+          })
+}, [])
+
   const submitNewContact = () => {
-    setPersons(persons.concat({ name: newName, phone: newPhone }));
+    setPersons(persons.concat({ name: newName, number: newPhone, id: persons.length + 1 || 0 }));
     setNewPhone("");
     setNewName("");
   };
