@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const ResultList = (props) => {
   const { countries } = { ...props };
@@ -37,20 +38,49 @@ const CountryExpanded = (props) => {
         ))}
       </ul>
       <img src={country.flag} width="25%"></img>
+      <Weather></Weather>
     </>
   );
 };
 
+const Weather = (countryName) => {
+  const [weatherData, setWeatherData] = useState({});
+  const apiKey = process.env.REACT_APP_WEATHER_API_KEY
+  useEffect(() => {
+    const requestURL = `http://api.weatherstack.com/current?access_key=${apiKey}&query=${countryName}`
+    axios.get(requestURL)
+         .then(response => {
+             console.log("response:", response)
+             setWeatherData(response.data)
+         })
+  }, []);
+
+  return weatherData ? <></> : <></>;
+};
+
 const CountryResult = (props) => {
-  const { country, expandedInitially } = { ...props };
+  let { country, expanded } = { ...props };
 
-  const [expanded, setExpanded] = useState(expandedInitially)
+  expanded = expanded ? true : false
 
-  return expanded ? (
+  const [expandView, setExpandView] = useState(expanded);
+
+  console.log(expanded === expandView)
+
+  console.log(`${country.name} expanded: ${expandView}`)
+
+  return expandView ? (
     <CountryExpanded key={country.name} country={country}></CountryExpanded>
   ) : (
-    <p key={country.name}>{country.name}
-    <button onClick={() => {setExpanded(true)}}>Show!</button>
+    <p key={country.name}>
+      {country.name}
+      <button
+        onClick={() => {
+          setExpandView(true);
+        }}
+      >
+        Show!
+      </button>
     </p>
   );
 };
