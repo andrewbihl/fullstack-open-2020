@@ -2,27 +2,36 @@ import React, { useState, useEffect } from "react";
 import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
 import ContactSearchBar from "./components/ContactSearchBar";
-import axios from "axios"
+import { fetchContacts, createContact } from "./services/contacts";
 
 const App = (props) => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [query, setQuery] = useState("");
+  const [submitEnabled, setSubmitEnabled] = useState(true);
 
-
-useEffect(() => {
-    axios.get("http://localhost:3001/persons")
-          .then(response => {
-              console.log("promised fulfilled:", response)
-              setPersons(response.data)
-          })
-}, [])
+  useEffect(() => {
+    fetchContacts().then((response) => {
+      console.log("promised fulfilled:", response);
+      setPersons(response.data);
+    });
+  }, []);
 
   const submitNewContact = () => {
-    setPersons(persons.concat({ name: newName, number: newPhone, id: persons.length + 1 || 0 }));
-    setNewPhone("");
-    setNewName("");
+    const newPerson = {
+      name: newName,
+      number: newPhone,
+      id: persons.length + 1 || 0,
+    };
+
+    setSubmitEnabled(false);
+    return createContact(newPerson).then((response) => {
+      setPersons(persons.concat(newPerson));
+      setNewPhone("");
+      setNewName("");
+      setSubmitEnabled(true);
+    });
   };
 
   const handleContactSubmit = (event) => {
@@ -31,6 +40,7 @@ useEffect(() => {
     if (names.includes(newName)) {
       alert("Already got that one yo");
     } else {
+      event.target.enabled = false;
       submitNewContact();
     }
   };
@@ -50,6 +60,7 @@ useEffect(() => {
     <div>
       <h2>Phonebook</h2>
       <ContactForm
+        enabled={submitEnabled}
         fields={[
           {
             name: "name",
