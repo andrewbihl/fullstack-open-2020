@@ -9,6 +9,6 @@
 - [x] 2.9: phonebook, step 4
 - [x] 2.10: phonebook, step 5
 - [x] 2.11: phonebook, step 6
-- [ ] 2.12: countries, step 1
+- [x] 2.12: countries, step 1
 - [ ] 2.13: countries, step 2
 - [ ] 2.14: countries, step 3
