@@ -11,4 +11,4 @@
 - [x] 2.11: phonebook, step 6
 - [x] 2.12: countries, step 1
 - [x] 2.13: countries, step 2
-- [ ] 2.14: countries, step 3
+- [x] 2.14: countries, step 3

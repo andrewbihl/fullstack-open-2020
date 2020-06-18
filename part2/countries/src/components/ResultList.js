@@ -38,45 +38,56 @@ const CountryExpanded = (props) => {
         ))}
       </ul>
       <img src={country.flag} width="25%"></img>
-      <Weather></Weather>
+      <Weather city={country.capital}></Weather>
     </>
   );
 };
 
-const Weather = (countryName) => {
-  const [weatherData, setWeatherData] = useState({});
-  const apiKey = process.env.REACT_APP_WEATHER_API_KEY
+const Weather = ({ city }) => {
+  const [weatherData, setWeatherData] = useState(null);
+  const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
   useEffect(() => {
-    const requestURL = `http://api.weatherstack.com/current?access_key=${apiKey}&query=${countryName}`
-    axios.get(requestURL)
-         .then(response => {
-             console.log("response:", response)
-             setWeatherData(response.data)
-         })
+    const requestURL = `http://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`;
+    axios.get(requestURL).then((response) => {
+      console.log("response:", response);
+      if (response.data.current) {
+        setWeatherData(response.data.current);
+      }
+    });
   }, []);
 
-  return weatherData ? <></> : <></>;
+  console.log(weatherData);
+  return weatherData ? (
+    <>
+      <p>Weather in {city}</p>
+      <ul>
+        <li>{weatherData.temperature} celsius</li>
+        <li>{weatherData.weather_descriptions}</li>
+      </ul>
+      {weatherData.weather_icons ? (
+        <img src={weatherData.weather_icons[0]}></img>
+      ) : (
+        <></>
+      )}
+    </>
+  ) : (
+    <></>
+  );
 };
 
 const CountryResult = (props) => {
   let { country, expanded } = { ...props };
 
-  expanded = expanded ? true : false
+  const [forceExpand, setForceExpand] = useState(false);
 
-  const [expandView, setExpandView] = useState(expanded);
-
-  console.log(expanded === expandView)
-
-  console.log(`${country.name} expanded: ${expandView}`)
-
-  return expandView ? (
+  return expanded || forceExpand ? (
     <CountryExpanded key={country.name} country={country}></CountryExpanded>
   ) : (
     <p key={country.name}>
       {country.name}
       <button
         onClick={() => {
-          setExpandView(true);
+          setForceExpand(true);
         }}
       >
         Show!
