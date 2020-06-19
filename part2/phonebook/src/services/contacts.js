@@ -1,7 +1,7 @@
 import axios from "axios"
 
 
-export function fetchContacts() {
+export async function fetchContacts() {
     return axios.get("http://localhost:3001/persons")
 }
 
@@ -10,4 +10,8 @@ export async function createContact(contact) {
         throw "bad input - need name"
     }
     return axios.post("http://localhost:3001/persons",contact)
+}
+
+export async function deleteContact(contactID) {
+    return axios.delete(`http://localhost:3001/persons/${contactID}`)
 }

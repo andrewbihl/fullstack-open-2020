@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
 import ContactSearchBar from "./components/ContactSearchBar";
-import { fetchContacts, createContact } from "./services/contacts";
+import { fetchContacts, createContact, deleteContact } from "./services/contacts";
 
 const App = (props) => {
   const [persons, setPersons] = useState([]);
@@ -24,7 +24,6 @@ const App = (props) => {
       number: newPhone,
       id: persons.length + 1 || 0,
     };
-
     setSubmitEnabled(false);
     return createContact(newPerson).then((response) => {
       setPersons(persons.concat(newPerson));
@@ -33,6 +32,15 @@ const App = (props) => {
       setSubmitEnabled(true);
     });
   };
+
+  const deleteExistingContact = (contactID) => {
+    deleteContact(contactID).then(response => {
+        console.log(response)
+        if (response.status == 200) {
+            setPersons(persons.filter(p => p.id !== contactID))
+        }
+    })
+  }
 
   const handleContactSubmit = (event) => {
     event.preventDefault();
@@ -44,6 +52,13 @@ const App = (props) => {
       submitNewContact();
     }
   };
+
+  const handleContactDelete = (contact) => {
+      const confirmed = window.confirm("You really wanna do that?")
+      if (confirmed) {
+          deleteExistingContact(contact.id)
+      }
+  }
 
   function filteredContacts(persons, query) {
     return persons.filter((p) =>
@@ -80,7 +95,7 @@ const App = (props) => {
         query={query}
         onChange={handleSearchBarChange}
       ></ContactSearchBar>
-      <ContactList contacts={filteredContacts(persons, query)}></ContactList>
+      <ContactList handleDelete={handleContactDelete} contacts={filteredContacts(persons, query)}></ContactList>
     </div>
   );
 };
