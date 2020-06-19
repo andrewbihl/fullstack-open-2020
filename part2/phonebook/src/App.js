@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
 import ContactSearchBar from "./components/ContactSearchBar";
-import { fetchContacts, createContact, deleteContact } from "./services/contacts";
+import {
+  fetchContacts,
+  createContact,
+  deleteContact,
+  updateContact,
+} from "./services/contacts";
 
 const App = (props) => {
   const [persons, setPersons] = useState([]);
@@ -34,19 +39,47 @@ const App = (props) => {
   };
 
   const deleteExistingContact = (contactID) => {
-    deleteContact(contactID).then(response => {
-        console.log(response)
-        if (response.status == 200) {
-            setPersons(persons.filter(p => p.id !== contactID))
-        }
-    })
-  }
+    deleteContact(contactID).then((response) => {
+      if (response.status === 200) {
+        setPersons(persons.filter((p) => p.id !== contactID));
+      }
+    });
+  };
+
+  const updateExistingContact = (index) => {
+    const newPerson = {
+        id: persons[index].id,
+        name: newName,
+        number: newPhone,
+    }
+
+    updateContact(newPerson).then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        let newPersons = persons.slice(0, index).concat(newPerson).concat(persons.slice(index + 1))
+        setPersons(newPersons);
+      }
+    });
+  };
 
   const handleContactSubmit = (event) => {
     event.preventDefault();
     const names = persons.map((p) => p.name);
-    if (names.includes(newName)) {
-      alert("Already got that one yo");
+    let [index, person] = [-1, null];
+    for (let i = 0; i < persons.length; i++) {
+      const p = persons[i];
+      if (p.name == newName) {
+        index = i;
+        person = p;
+        break;
+      }
+    }
+
+    if (index != -1) {
+      const shouldUpdate = window.confirm("Edit existing contact?");
+      if (shouldUpdate) {
+        updateExistingContact(index);
+      }
     } else {
       event.target.enabled = false;
       submitNewContact();
@@ -54,13 +87,14 @@ const App = (props) => {
   };
 
   const handleContactDelete = (contact) => {
-      const confirmed = window.confirm("You really wanna do that?")
-      if (confirmed) {
-          deleteExistingContact(contact.id)
-      }
-  }
+    const confirmed = window.confirm("You really wanna do that?");
+    if (confirmed) {
+      deleteExistingContact(contact.id);
+    }
+  };
 
   function filteredContacts(persons, query) {
+      console.log(persons);
     return persons.filter((p) =>
       p.name.toLowerCase().includes(query.toLowerCase())
     );
@@ -95,7 +129,10 @@ const App = (props) => {
         query={query}
         onChange={handleSearchBarChange}
       ></ContactSearchBar>
-      <ContactList handleDelete={handleContactDelete} contacts={filteredContacts(persons, query)}></ContactList>
+      <ContactList
+        handleDelete={handleContactDelete}
+        contacts={filteredContacts(persons, query)}
+      ></ContactList>
     </div>
   );
 };
