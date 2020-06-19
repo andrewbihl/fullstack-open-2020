@@ -3,6 +3,7 @@ import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
 import ContactSearchBar from "./components/ContactSearchBar";
 import SuccessMessage from "./components/SuccessMessage";
+import FailureMessage from "./components/FailureMessage";
 import {
   fetchContacts,
   createContact,
@@ -17,6 +18,7 @@ const App = (props) => {
   const [query, setQuery] = useState("");
   const [submitEnabled, setSubmitEnabled] = useState(true);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showFailMessage, setShowFailMessage] = useState(false);
 
   useEffect(() => {
     fetchContacts().then((response) => {
@@ -32,6 +34,13 @@ const App = (props) => {
     }, 3000);
   };
 
+  const presentFailureMessage = () => {
+    setShowFailMessage(true);
+    setTimeout(() => {
+      setShowFailMessage(false);
+    }, 3000);
+  };
+
   const submitNewContact = () => {
     const newPerson = {
       name: newName,
@@ -39,21 +48,30 @@ const App = (props) => {
       id: persons.length + 1 || 0,
     };
     setSubmitEnabled(false);
-    return createContact(newPerson).then((response) => {
-      setPersons(persons.concat(newPerson));
-      setNewPhone("");
-      setNewName("");
-      setSubmitEnabled(true);
-      presentSuccessMessage();
-    });
+    return createContact(newPerson)
+      .then((response) => {
+        setPersons(persons.concat(newPerson));
+        setNewPhone("");
+        setNewName("");
+        setSubmitEnabled(true);
+        presentSuccessMessage();
+      })
+      .catch((reject) => {
+        console.log(reject);
+        presentFailureMessage();
+      });
   };
 
   const deleteExistingContact = (contactID) => {
-    deleteContact(contactID).then((response) => {
-      if (response.status === 200) {
-        setPersons(persons.filter((p) => p.id !== contactID));
-      }
-    });
+    deleteContact(contactID)
+      .then((response) => {
+        if (response.status === 200) {
+          setPersons(persons.filter((p) => p.id !== contactID));
+        }
+      })
+      .catch((reject) => {
+        presentFailureMessage();
+      });
   };
 
   const updateExistingContact = (index) => {
@@ -63,17 +81,22 @@ const App = (props) => {
       number: newPhone,
     };
 
-    updateContact(newPerson).then((response) => {
-      console.log(response);
-      if (response.status === 200) {
-        let newPersons = persons
-          .slice(0, index)
-          .concat(newPerson)
-          .concat(persons.slice(index + 1));
-        setPersons(newPersons);
-        presentSuccessMessage();
-      }
-    });
+    updateContact(newPerson)
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          let newPersons = persons
+            .slice(0, index)
+            .concat(newPerson)
+            .concat(persons.slice(index + 1));
+          setPersons(newPersons);
+          presentSuccessMessage();
+        }
+      })
+      .catch((reject) => {
+        console.log(reject);
+        presentFailureMessage();
+      });
   };
 
   const handleContactSubmit = (event) => {
@@ -123,6 +146,7 @@ const App = (props) => {
     <div>
       <h2>Phonebook</h2>
       <SuccessMessage show={showSuccessMessage}></SuccessMessage>
+      <FailureMessage show={showFailMessage}></FailureMessage>
       <ContactForm
         enabled={submitEnabled}
         fields={[

@@ -17,3 +17,4 @@
 - [x] 2.17: phonebook, step 9
 - [x] 2.18: phonebook, step 10
 - [x] 2.19: phonebook, step 11
+- [x] 2.20: phonebook, step 12

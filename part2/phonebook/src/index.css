@@ -8,3 +8,14 @@
     margin: 25px;
     padding: 5px;
 }
+
+.failure-message {
+    font-size: 24px;
+    color: red;
+    border-radius: 5px;
+    border-color: red;
+    border-style: solid;
+    background-color: lightgray;
+    margin: 25px;
+    padding: 5px;
+}
