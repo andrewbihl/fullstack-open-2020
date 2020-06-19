@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ContactList from "./components/ContactList";
 import ContactForm from "./components/ContactForm";
 import ContactSearchBar from "./components/ContactSearchBar";
+import SuccessMessage from "./components/SuccessMessage";
 import {
   fetchContacts,
   createContact,
@@ -15,6 +16,7 @@ const App = (props) => {
   const [newPhone, setNewPhone] = useState("");
   const [query, setQuery] = useState("");
   const [submitEnabled, setSubmitEnabled] = useState(true);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     fetchContacts().then((response) => {
@@ -22,6 +24,13 @@ const App = (props) => {
       setPersons(response.data);
     });
   }, []);
+
+  const presentSuccessMessage = () => {
+    setShowSuccessMessage(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000);
+  };
 
   const submitNewContact = () => {
     const newPerson = {
@@ -35,6 +44,7 @@ const App = (props) => {
       setNewPhone("");
       setNewName("");
       setSubmitEnabled(true);
+      presentSuccessMessage();
     });
   };
 
@@ -48,16 +58,20 @@ const App = (props) => {
 
   const updateExistingContact = (index) => {
     const newPerson = {
-        id: persons[index].id,
-        name: newName,
-        number: newPhone,
-    }
+      id: persons[index].id,
+      name: newName,
+      number: newPhone,
+    };
 
     updateContact(newPerson).then((response) => {
       console.log(response);
       if (response.status === 200) {
-        let newPersons = persons.slice(0, index).concat(newPerson).concat(persons.slice(index + 1))
+        let newPersons = persons
+          .slice(0, index)
+          .concat(newPerson)
+          .concat(persons.slice(index + 1));
         setPersons(newPersons);
+        presentSuccessMessage();
       }
     });
   };
@@ -68,14 +82,14 @@ const App = (props) => {
     let [index, person] = [-1, null];
     for (let i = 0; i < persons.length; i++) {
       const p = persons[i];
-      if (p.name == newName) {
+      if (p.name === newName) {
         index = i;
         person = p;
         break;
       }
     }
 
-    if (index != -1) {
+    if (index !== -1) {
       const shouldUpdate = window.confirm("Edit existing contact?");
       if (shouldUpdate) {
         updateExistingContact(index);
@@ -94,7 +108,7 @@ const App = (props) => {
   };
 
   function filteredContacts(persons, query) {
-      console.log(persons);
+    console.log(persons);
     return persons.filter((p) =>
       p.name.toLowerCase().includes(query.toLowerCase())
     );
@@ -108,6 +122,7 @@ const App = (props) => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessMessage show={showSuccessMessage}></SuccessMessage>
       <ContactForm
         enabled={submitEnabled}
         fields={[
