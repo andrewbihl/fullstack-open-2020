@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 
 const data = {
   persons: [
@@ -36,20 +37,33 @@ app.get("/api/persons/:id", (request, response) => {
   if (p) {
     response.json(p);
   } else {
-    response.status(404).end()
+    response.status(404).end();
   }
 });
 
-app.delete('/api/persons/:id', (request, response) => {
-    const idToRemove = Number(request.params.id)
-    const index = data.persons.findIndex(p => p.id === idToRemove)
-    if (index === -1 ){
-        response.status(404).end()
-    }
-    const ps = data.persons
-    data.persons = ps.slice(0, index).concat(ps.slice(index+1))
-    response.status(204).end()
-})
+app.post("/api/persons", (request, response) => {
+  console.log("########", request.body);
+  const person = request.body;
+  if (!person.name || !person.number) {
+    response.status(422).end();
+  }
+  const newID = Math.floor(Math.random() * 4294967296);
+  person.id = newID;
+  console.log(person);
+  data.persons.push(person);
+  response.status(200).json(person).end();
+});
+
+app.delete("/api/persons/:id", (request, response) => {
+  const idToRemove = Number(request.params.id);
+  const index = data.persons.findIndex((p) => p.id === idToRemove);
+  if (index === -1) {
+    response.status(404).end();
+  }
+  const ps = data.persons;
+  data.persons = ps.slice(0, index).concat(ps.slice(index + 1));
+  response.status(204).end();
+});
 
 app.get("/info", (request, response) => {
   const now = Date();
