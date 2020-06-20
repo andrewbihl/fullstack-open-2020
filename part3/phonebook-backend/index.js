@@ -1,5 +1,5 @@
-const express = require('express')
-const app = express()
+const express = require("express");
+const app = express();
 
 const data = {
   persons: [
@@ -26,24 +26,30 @@ const data = {
   ],
 };
 
+app.get("/api/persons", (request, response) => {
+  response.json(data.persons);
+});
 
-app.get('/api/notes', (request, response) => {
-    response.json(data.persons)
-})
+app.get("/api/persons/:id", (request, response) => {
+  console.log(request.params);
+  const p = data.persons.find((p) => p.id === Number(request.params.id));
+  if (p) {
+    response.json(p);
+  } else {
+    response.status(404).end()
+  }
+});
 
-app.get('/info', (request, response) => {
-    const now = Date()
-    const infoPageHTML = 
-    `
+app.get("/info", (request, response) => {
+  const now = Date();
+  const infoPageHTML = `
     <p>Phonebook has info for ${data.persons.length} people</p>
     <p>${now}</p>
-    `
-    
-    response.send(
-        infoPageHTML
-    )
-})
+    `;
 
-const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}...`)
+  response.send(infoPageHTML);
+});
+
+const PORT = 3001;
+app.listen(PORT);
+console.log(`Server running on port ${PORT}...`);
