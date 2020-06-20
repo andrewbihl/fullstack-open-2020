@@ -1,0 +1,19 @@
+{
+  "name": "phonebook-backend",
+  "version": "1.0.0",
+  "description": "Backend server for the phonebook app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"No test specified\"",
+    "dev": "nodemon index.js"
+  },
+  "author": "andrewbihl",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
