@@ -1,7 +1,7 @@
 - [x] 3.1: phonebook-backend, step 1
 - [x] 3.2: phonebook-backend, step 2
 - [x] 3.3: phonebook-backend, step 3
-- [ ] 3.4: phonebook-backend, step 4
+- [x] 3.4: phonebook-backend, step 4
 - [ ] 3.5: phonebook-backend, step 5
 - [ ] 3.6: phonebook-backend, step 6
 - [ ] 3.7: phonebook-backend, step 7

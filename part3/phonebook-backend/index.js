@@ -40,6 +40,17 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
+app.delete('/api/persons/:id', (request, response) => {
+    const idToRemove = Number(request.params.id)
+    const index = data.persons.findIndex(p => p.id === idToRemove)
+    if (index === -1 ){
+        response.status(404).end()
+    }
+    const ps = data.persons
+    data.persons = ps.slice(0, index).concat(ps.slice(index+1))
+    response.status(204).end()
+})
+
 app.get("/info", (request, response) => {
   const now = Date();
   const infoPageHTML = `
