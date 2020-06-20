@@ -43,15 +43,26 @@ app.get("/api/persons/:id", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   console.log("########", request.body);
-  const person = request.body;
-  if (!person.name || !person.number) {
-    response.status(422).end();
+
+  const failMessage = (errorMessage) => {
+    response.status(422).json({error: errorMessage}).end();
+  }
+  const newPerson = request.body;
+  if (!newPerson.name) {
+    return failMessage('name required')
+  }
+  if (!newPerson.number) {
+    return failMessage('number required')
+  }
+
+  if (data.persons.find(p => p.name === newPerson.name)) {
+    return failMessage('name must be unique')
   }
   const newID = Math.floor(Math.random() * 4294967296);
-  person.id = newID;
-  console.log(person);
-  data.persons.push(person);
-  response.status(200).json(person).end();
+  newPerson.id = newID;
+  console.log(newPerson);
+  data.persons.push(newPerson);
+  response.status(200).json(newPerson).end();
 });
 
 app.delete("/api/persons/:id", (request, response) => {
