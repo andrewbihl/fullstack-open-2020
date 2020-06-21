@@ -1,8 +1,12 @@
 const express = require("express");
-const morgan = require('morgan');
+const morgan = require("morgan");
 const app = express();
 app.use(express.json());
-app.use(morgan('tiny'));
+
+morgan.token("body", (req, res) => JSON.stringify(req.body));
+
+app.use(morgan("tiny"));
+app.use(morgan(":body"));
 
 const data = {
   persons: [
@@ -44,21 +48,20 @@ app.get("/api/persons/:id", (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-  console.log("########", request.body);
-
   const failMessage = (errorMessage) => {
-    response.status(422).json({error: errorMessage}).end();
-  }
+    response.status(422).json({ error: errorMessage }).end();
+  };
   const newPerson = request.body;
   if (!newPerson.name) {
-    return failMessage('name required')
+    return failMessage("name required");
   }
   if (!newPerson.number) {
-    return failMessage('number required')
+    return failMessage("number required");
   }
+  ff;
 
-  if (data.persons.find(p => p.name === newPerson.name)) {
-    return failMessage('name must be unique')
+  if (data.persons.find((p) => p.name === newPerson.name)) {
+    return failMessage("name must be unique");
   }
   const newID = Math.floor(Math.random() * 4294967296);
   newPerson.id = newID;
