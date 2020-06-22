@@ -1,6 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
+
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 morgan.token("body", (req, res) => JSON.stringify(req.body));
@@ -8,7 +11,8 @@ morgan.token("body", (req, res) => JSON.stringify(req.body));
 app.use(morgan("tiny"));
 app.use(morgan(":body"));
 
-const data = {
+
+let data = {
   persons: [
     {
       name: "Arto Hellas",
@@ -34,6 +38,7 @@ const data = {
 };
 
 app.get("/api/persons", (request, response) => {
+  console.info("persons:", data.persons);
   response.json(data.persons);
 });
 
@@ -58,7 +63,6 @@ app.post("/api/persons", (request, response) => {
   if (!newPerson.number) {
     return failMessage("number required");
   }
-  ff;
 
   if (data.persons.find((p) => p.name === newPerson.name)) {
     return failMessage("name must be unique");
@@ -71,14 +75,19 @@ app.post("/api/persons", (request, response) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
+  console.log("id:", request.params.id);
+  console.log("data:", data);
   const idToRemove = Number(request.params.id);
   const index = data.persons.findIndex((p) => p.id === idToRemove);
   if (index === -1) {
-    response.status(404).end();
+    return response.status(404).end();
   }
   const ps = data.persons;
-  data.persons = ps.slice(0, index).concat(ps.slice(index + 1));
-  response.status(204).end();
+  console.log("index:", index);
+  const newData = ps.slice(0, index).concat(ps.slice(index + 1));
+  console.log("new data:", newData);
+  data.persons = newData;
+  return response.status(204).end();
 });
 
 app.get("/info", (request, response) => {
