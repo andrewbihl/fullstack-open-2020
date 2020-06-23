@@ -8,4 +8,5 @@
 - [x] 3.8: phonebook-backend, step 8
 - [x] 3.9: phonebook-backend, step 9
 - [x] 3.10: phonebook-backend, step 10
-- [ ] 3.11: phonebook full stack
+- [x] 3.11: phonebook full stack
+    - See https://phonebook-fullstackopen-1.herokuapp.com/
