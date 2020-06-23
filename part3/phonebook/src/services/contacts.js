@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = process.env.backendURL || "http://localhost:3001/api";
+const apiURL = process.env.backendURL || "/api";
 
 export async function fetchContacts() {
   return axios.get(apiURL + "/persons");
